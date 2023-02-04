@@ -10,16 +10,37 @@
     "Programming Languages"
   ],
   "contributes": {
-    "languages": [{
-      "id": "wlanguage",
-      "aliases": ["WLanguage", "wlanguage"],
-      "extensions": ["(.wd",".wdp",".wdg",".wdc",".wdw",".wpf",".wdr)"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "wlanguage",
-      "scopeName": "source.wlanguage",
-      "path": "./syntaxes/wlanguage.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "wlanguage",
+        "aliases": [
+          "WLanguage",
+          "wlanguage"
+        ],
+        "extensions": [
+          ".wd",
+          ".wdp",
+          ".wdg",
+          ".wdc",
+          ".wdw",
+          ".wpf",
+          ".wdr"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "wlanguage",
+        "scopeName": "source.wlanguage",
+        "path": "./syntaxes/wlanguage.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "convert": "npx js-yaml syntaxes/wlanguage.tmLanguage.yaml > syntaxes/wlanguage.tmLanguage.json"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
   }
 }

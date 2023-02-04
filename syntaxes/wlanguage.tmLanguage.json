@@ -1,32 +1,49 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "WLanguage",
-	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		}
-	],
-	"repository": {
-		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.wlanguage",
-				"match": "\\b(if|while|for|return)\\b"
-			}]
-		},
-		"strings": {
-			"name": "string.quoted.double.wlanguage",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.wlanguage",
-					"match": "\\\\."
-				}
-			]
-		}
-	},
-	"scopeName": "source.wlanguage"
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "WLanguage",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.wlanguage",
+          "match": "//.*$\\n?"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.wlanguage",
+          "match": "\\b(SI|ALORS|FIN|RENVOYER|RETOUR|SORTIR)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.wlanguage",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "match": "\\[%(.*?)%\\]",
+          "captures": {
+            "1": {
+              "name": "constant.character.escape"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scopeName": "source.wlanguage"
 }
