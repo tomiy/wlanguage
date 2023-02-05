@@ -26,14 +26,14 @@
           ".wpf",
           ".wdr"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./config/language-configuration.json"
       }
     ],
     "grammars": [
       {
         "language": "wlanguage",
         "scopeName": "source.wlanguage",
-        "path": "./syntaxes/wlanguage.tmLanguage.json"
+        "path": "./dist/data/syntaxes/wlanguage.tmLanguage.json"
       }
     ]
   },
