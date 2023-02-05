@@ -8,7 +8,7 @@ var problemMatcherStartMessage = "Files change detected";
 var problemMatcherEndMessage = "Files processed : watching changes...";
 
 // tmLanguage watcher
-chokidar.watch('./src/data/syntaxes/wlanguage.tmLanguage.yaml').on('all', (event, path) => {
+chokidar.watch('./language/src/data/syntaxes/wlanguage.tmLanguage.yaml').on('all', (event, path) => {
     console.log(problemMatcherStartMessage);
 
     if (['add', 'change'].includes(event)) {

@@ -26,19 +26,19 @@
           ".wpf",
           ".wdr"
         ],
-        "configuration": "./config/language-configuration.json"
+        "configuration": "./language/config/language-configuration.json"
       }
     ],
     "grammars": [
       {
         "language": "wlanguage",
         "scopeName": "source.wlanguage",
-        "path": "./dist/data/syntaxes/wlanguage.tmLanguage.json"
+        "path": "./language/dist/data/syntaxes/wlanguage.tmLanguage.json"
       }
     ]
   },
   "scripts": {
-    "monitor": "node dev/utils/scripts/monitor.js"
+    "monitor": "node language/src/scripts/monitor.js"
   },
   "devDependencies": {
     "chokidar": "^3.5.3",
