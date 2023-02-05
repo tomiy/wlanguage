@@ -9,6 +9,7 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./client/out/extension",
   "contributes": {
     "languages": [
       {
@@ -35,13 +36,48 @@
         "scopeName": "source.wlanguage",
         "path": "./language/dist/data/syntaxes/wlanguage.tmLanguage.json"
       }
-    ]
+    ],
+    "configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+				"languageServerExample.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"languageServerExample.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
   },
   "scripts": {
-    "monitor": "node language/src/scripts/monitor.js"
+    "monitor": "node language/src/scripts/monitor.js",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.19",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "chokidar": "^3.5.3",
-    "js-yaml": "^4.1.0"
+    "eslint": "^8.33.0",
+    "js-yaml": "^4.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5"
   }
 }

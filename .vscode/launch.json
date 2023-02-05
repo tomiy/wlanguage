@@ -9,10 +9,11 @@
             "name": "Extension",
             "type": "extensionHost",
             "request": "launch",
-            "preLaunchTask": "task: monitor",
+            "preLaunchTask": "build",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "autoAttachChildProcesses": true,
             "postDebugTask": "Terminate All Tasks"
         }
     ]
