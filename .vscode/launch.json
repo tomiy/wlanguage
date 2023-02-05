@@ -9,10 +9,11 @@
             "name": "Extension",
             "type": "extensionHost",
             "request": "launch",
-            "preLaunchTask": "npm: convert",
+            "preLaunchTask": "task: monitor",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
-            ]
+            ],
+            "postDebugTask": "Terminate All Tasks"
         }
     ]
 }

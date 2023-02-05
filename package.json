@@ -38,9 +38,10 @@
     ]
   },
   "scripts": {
-    "convert": "npx js-yaml syntaxes/wlanguage.tmLanguage.yaml > syntaxes/wlanguage.tmLanguage.json"
+    "monitor": "node dev/utils/scripts/monitor.js"
   },
   "devDependencies": {
+    "chokidar": "^3.5.3",
     "js-yaml": "^4.1.0"
   }
 }

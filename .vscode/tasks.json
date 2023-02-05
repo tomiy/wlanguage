@@ -3,10 +3,47 @@
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "convert",
-			"problemMatcher": [],
-			"label": "npm: convert",
-			"detail": "npx js-yaml syntaxes/wlanguage.tmLanguage.yaml > syntaxes/wlanguage.tmLanguage.json"
+			"script": "monitor",
+			"label": "task: monitor",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": [
+					{
+						"regexp": "^(.*):(.*):(.*)$",
+						"file": 1,
+						"location": 2,
+						"message": 3
+					}
+				],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Initializing",
+					"endsPattern": "Initialization completed"
+				}
+			}
+		},
+		{
+			"label": "Terminate All Tasks",
+			"command": "echo ${input:terminate}",
+			"type": "shell",
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "terminate",
+			"type": "command",
+			"command": "workbench.action.tasks.terminate",
+			"args": "terminateAll"
 		}
 	]
 }
