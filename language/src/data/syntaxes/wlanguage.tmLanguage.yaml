@@ -14,7 +14,7 @@ repository:
   keywords:
     patterns:
     - name: keyword.control.wlanguage
-      match: "\\b(SI|ALORS|FIN|RENVOYER|RETOUR|FINITOTO)\\b"
+      match: "\\b(SI|ALORS|FIN|RENVOYER|RETOUR)\\b"
   strings:
     name: string.quoted.double.wlanguage
     begin: "\""
