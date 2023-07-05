@@ -3,8 +3,16 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import * as path from 'path';
-import * as vscode from 'vscode';
+import { join } from 'path';
+import {
+	ExtensionContext,
+	languages,
+	TextDocument,
+	Range,
+	FormattingOptions,
+	CancellationToken,
+	TextEdit, workspace
+} from 'vscode';
 
 import {
 	LanguageClient,
@@ -13,28 +21,29 @@ import {
 	TransportKind
 } from 'vscode-languageclient/node';
 
+import Formatter from './formatter/Formatter';
+
 let client: LanguageClient;
 
-export function activate(context: vscode.ExtensionContext) {
-	const provider1 = vscode.languages.registerCompletionItemProvider('wlanguage', {
+export function activate(context: ExtensionContext) {
+	languages.registerDocumentRangeFormattingEditProvider('wlanguage', {
+		provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, _options: FormattingOptions, _token: CancellationToken): TextEdit[] {
+			let start = document.offsetAt(range.start);
+			let end = document.offsetAt(range.end) - 1; // Make the end inclusive.
+			let code = document.getText();
 
-		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
+			const formatter = new Formatter(code);
+			let text = formatter.formatText();
 
-			const siFin = new vscode.CompletionItem('SI');
-			siFin.detail = 'SI...ALORS...FIN';
-			siFin.insertText = new vscode.SnippetString('SI ${1:condition} ALORS\n\t${2:expression}\nFIN');
+			const resultRange = range.with(document.positionAt(start), document.positionAt(end + 1));
 
-			return [
-				siFin
-			];
+			return [TextEdit.replace(resultRange, text)];
 		}
 	});
 
-	context.subscriptions.push(provider1);
-
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(
-		path.join('server', 'out', 'server.js')
+		join('server', 'out', 'server.js')
 	);
 
 	// If the extension is launched in debug mode then the debug server options are used
@@ -53,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 		documentSelector: [{ scheme: 'file', language: 'wlanguage' }],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
-			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
+			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
 		}
 	};
 

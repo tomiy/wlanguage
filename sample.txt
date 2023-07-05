@@ -1,0 +1,35 @@
+Procedure CSXXX(p1 = "", p2 = "")
+//p1 =
+//p2 =
+//*****************************************DESCRIPTION***********************************
+//*
+//*
+//*
+//***************************************************************************************
+
+//*****************************************HISTORIQUE************************************
+//* DATE         INTERVENANT  STATUT          COMMENTAIRE
+//* 2001/01/13
+//*
+//*
+//***************************************************************************************
+G_LOGF("CSXXX: p1 = " + p1 + ", p2 = " + p2)
+
+/*
+    multiline
+    comment
+*/
+
+LOCAL
+    Reponse est une chaine = "OK" + RC
+    FlagTest est un booleen = Vrai
+
+SI FlagTest ALORS
+    // Mettre le traitement a faire lors d'un test
+SINON
+    // Mettre le traitement a faire lors de la production
+FIN
+
+G_LOGF("CSXXX: reponse = " + Reponse)
+
+Renvoyer Reponse
