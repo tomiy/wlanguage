@@ -179,7 +179,7 @@ export default class Formatter {
         let spaceAfter = true;
 
         let isUnary = (['-', '+'].includes(currentToken.text) && (
-            [TOKEN.START_BLOCK, TOKEN.START_EXPR, TOKEN.EQUALS, TOKEN.OPERATOR].includes(currentToken._previous.type) ||
+            [TOKEN.START_EXPR, TOKEN.EQUALS, TOKEN.OPERATOR].includes(currentToken._previous.type) ||
             currentToken._previous.text === ','
         ));
 

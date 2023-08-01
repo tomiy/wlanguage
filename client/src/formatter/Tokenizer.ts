@@ -23,11 +23,11 @@ export default class Tokenizer extends BaseTokenizer {
     }
 
     isOpening(currentToken: Token): boolean {
-        return currentToken.type === TOKEN.START_BLOCK || currentToken.type === TOKEN.START_EXPR;
+        return currentToken.type === TOKEN.START_EXPR;
     }
 
     isClosing(currentToken: Token, openToken: Token): boolean {
-        return currentToken.type === TOKEN.END_BLOCK || currentToken.type === TOKEN.END_EXPR;
+        return currentToken.type === TOKEN.END_EXPR;
     }
 
     getNextToken(previousToken: Token, openToken: Token): Token {
@@ -71,9 +71,9 @@ export default class Tokenizer extends BaseTokenizer {
 
     readSingles(c: string) {
         let token: Token;
-        if(c === '(' || c === '[') {
+        if(c === '(' || c === '[' || c === '{') {
             token = this.createToken(TOKEN.START_EXPR, c);
-        } else if(c === ')' || c === ']') {
+        } else if(c === ')' || c === ']' || c === '}') {
             token = this.createToken(TOKEN.END_EXPR, c);
         } else if(c === '.' && REGEXP.DOT.test(this._input.peek(1))) {
             token = this.createToken(TOKEN.DOT, c);
