@@ -23,6 +23,7 @@ let allLineBreaks = new RegExp(lineBreak.source, 'g');
 
 let controlWords = 'FONCTION|GLOBALE|INTERNE|LOCAL|PROC[EÉ]DURE|A|\_A\_|ALORS|AUTRES|CAS|CHAQUE|DANS|\_DANS\_|ET|\_ET\_|FIN|OU|\_OU\_|PAS|POUR|QUAND|SELON|SI|SINON|SUR|TANTQUE|TOUS|TOUT|BOUCLE|CONTINUER|EXCEPTION|FAIRE|RENVOYER|RETOUR|SEPAREE|SORTIR'.split('|');
 let reservedWords = controlWords.concat('de|des|est|par|sont|un|une|sans|allouer|h[ée]rite|lib[ée]rer|modulo|soit'.split('|'));
+let controlPattern = new RegExp('^(?:' + controlWords.join('|') + ')$', 'i');
 let reservedPattern = new RegExp('^(?:' + reservedWords.join('|') + ')$', 'i');
 
 export const TOKEN = {
@@ -63,17 +64,8 @@ export const REGEXP = {
     IDENTIFIER: new RegExp(identifierStart + identifierChars, 'g'),
     IDENTIFIER_MATCH: new RegExp("(?:\\\\u[0-9a-fA-F]{4}|[" + baseASCIIidentifierChars + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "])+"),
     ALL_LINE_BREAKS: allLineBreaks,
-    DOT: /[^\d\.]/,
+    DOT: /[^\d]/,
     NEWLINE: newLine,
+    CONTROL: controlPattern,
     RESERVED: reservedPattern
-}
-
-export const MODE = {
-    BlockStatement: 'BlockStatement', // 'BLOCK'
-    Statement: 'Statement', // 'STATEMENT'
-    ObjectLiteral: 'ObjectLiteral', // 'OBJECT',
-    ArrayLiteral: 'ArrayLiteral', //'[EXPRESSION]',
-    ForInitializer: 'ForInitializer', //'(FOR-EXPRESSION)',
-    Conditional: 'Conditional', //'(COND-EXPRESSION)',
-    Expression: 'Expression' //'(EXPRESSION)'
 }

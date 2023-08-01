@@ -1,4 +1,4 @@
-Procedure CSXXX(p1 = "", p2 = "")
+PROCEDURE CSXXX(p1 = "", p2 = "")
 //p1 =
 //p2 =
 //*****************************************DESCRIPTION***********************************
@@ -32,4 +32,4 @@ FIN
 
 G_LOGF("CSXXX: reponse = " + Reponse)
 
-Renvoyer Reponse
+RENVOYER Reponse
