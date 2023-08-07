@@ -13,7 +13,7 @@ export default class Formatter {
 
     _conditionalDepth: number;
 
-    _localBlock: boolean;
+    _variableDeclarationBlock: boolean;
 
     _caseBlock: boolean;
     _caseBody: boolean;
@@ -236,11 +236,12 @@ export default class Formatter {
             this._output._spaceBeforeToken = true;
         }
 
-        if(this._localBlock && this._output.justAddedBlankLine()) {
+        // variable declaration blocks end when there are 2 newlines
+        if(this._variableDeclarationBlock && this._output.justAddedBlankLine()) {
             this.popFlags();
             this.deindent();
 
-            this._localBlock = false;
+            this._variableDeclarationBlock = false;
         }
 
         if(this.reservedWord(currentToken, 'FIN')) {
@@ -249,6 +250,17 @@ export default class Formatter {
 
             this._conditionalDepth--;
 
+            // for case blocks, we deindent one more time since case blocks don't have obvious end statements
+            //
+            // SELON x
+            //     CAS 1
+            //         some code
+            //
+            //     CAS 2
+            //         SI y ALORS
+            //             some code
+            //         FIN
+            // FIN --> deindent twice
             if(this._caseBlock && this._caseDepth === this._conditionalDepth - 1) {
                 this.popFlags();
                 this.deindent();
@@ -259,6 +271,16 @@ export default class Formatter {
             }
         }
 
+        // temporarily deindent for else statement so the keyword is at the correct indentation level
+        // if the statement is inline do nothing
+        //
+        // SI x ALORS
+        //     some code
+        // SINON --> deindent
+        //     some code
+        // FIN
+        //
+        // SI x ALORS some code SINON some code --> do nothing
         if(this.reservedWord(currentToken, 'SINON') && (currentToken._next._newlines > 0 || this.reservedWord(currentToken._next, 'SI'))) {
             this.popFlags();
             this.deindent();
@@ -266,20 +288,34 @@ export default class Formatter {
             this._conditionalDepth--;
         }
 
-        let complexCase = false;
+        // check for complex case body
+        //
+        // SELON x
+        //     CAS 1 : some code --> simple case body (inline statement with semicolon)
+        //     CAS 2
+        //         some code --> complex case body
+        // FIN
+        let complexCase = true;
         if(this.reservedWord(currentToken, 'CAS')) {
             let nextToken = currentToken._next;
             while(!nextToken._newlines) {
                 if(nextToken.text === ':') {
+                    complexCase = false;
                     break;
                 }
 
                 nextToken = nextToken._next;
             }
-
-            complexCase = true;
         }
 
+        // temporarily deindent for complex case body keyword unless it's the first one
+        //
+        // SELON x
+        //     CAS 1 --> don't deindent here
+        //         some code
+        //     CAS 2 --> deindent here
+        //         some code
+        // FIN
         if(this.reservedWord(currentToken, 'CAS') && complexCase) {
             if(this._caseBody) {
                 this.popFlags();
@@ -300,6 +336,7 @@ export default class Formatter {
             this._conditionalDepth++;
         }
 
+        // indent back to previous level in else block
         if(this.reservedWord(currentToken, 'SINON') && (currentToken._next._newlines > 0 || this.reservedWord(currentToken._next, 'SI'))) {
             this.indent();
             this.pushFlags();
@@ -314,6 +351,7 @@ export default class Formatter {
             this._conditionalDepth++;
         }
 
+        // indent back to previous level in case body (or indent once in the first one)
         if(this.reservedWord(currentToken, 'CAS') && complexCase) {
             this.indent();
             this.pushFlags();
@@ -323,11 +361,17 @@ export default class Formatter {
             this._caseBody = true;
         }
 
-        if(this.reservedWord(currentToken, 'LOCAL') && currentToken._next._newlines > 0) {
+        // indent if variable declaration block (LOCAL & GLOBAL can be used to define parameter scopes in function signatures)
+        //
+        // LOCAL
+        //     some variable declaration --> indent here
+        //
+        // PROCEDURE x(LOCAL variable) --> ignore here
+        if(this.reservedArray(currentToken, ['LOCAL', 'GLOBAL']) && currentToken._next._newlines > 0) {
             this.indent();
             this.pushFlags();
 
-            this._localBlock = true;
+            this._variableDeclarationBlock = true;
         }
 
         if(this.reservedWord(currentToken, 'SELON')) {
