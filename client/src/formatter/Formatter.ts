@@ -121,13 +121,13 @@ export default class Formatter {
         this._output.addNewLine(force);
     }
 
-    handleWhitespaceAndComments(currentToken: Token, preserveStatementFlags: boolean = false) {
+    handleWhitespaceAndComments(currentToken: Token) {
         let newlines = currentToken._newlines;
 
         if(currentToken._commentsBefore) {
             let commentToken = currentToken._commentsBefore.next();
             while(commentToken) {
-                this.handleWhitespaceAndComments(commentToken, preserveStatementFlags);
+                this.handleWhitespaceAndComments(commentToken);
                 this.handleToken(commentToken);
                 commentToken = currentToken._commentsBefore.next();
             }
@@ -173,7 +173,7 @@ export default class Formatter {
     }
 
     handleOperator(currentToken: Token) {
-        this.handleWhitespaceAndComments(currentToken, true);
+        this.handleWhitespaceAndComments(currentToken);
 
         let spaceBefore = true;
         let spaceAfter = true;
@@ -218,7 +218,7 @@ export default class Formatter {
     }
 
     handleComma(currentToken: Token) {
-        this.handleWhitespaceAndComments(currentToken, true);
+        this.handleWhitespaceAndComments(currentToken);
 
         this.printToken(currentToken);
         this._output._spaceBeforeToken = true;
