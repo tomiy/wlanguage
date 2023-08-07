@@ -8,3 +8,6 @@ client/**
 server/**
 tsconfig.json
 webpack.config.js
+
+!client/out/extension.js
+!server/out/server.js
