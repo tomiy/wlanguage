@@ -41,7 +41,7 @@
       "type": "object",
       "title": "WLanguage",
       "properties": {
-        "languageServerExample.trace.server": {
+        "wlanguageServer.trace.server": {
           "scope": "window",
           "type": "string",
           "enum": [
