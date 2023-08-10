@@ -57,15 +57,13 @@
   },
   "scripts": {
     "monitor": "node language/src/scripts/monitor.js",
-    "compile": "tsc -b",
-    "watch": "tsc -b -w",
+    "compile": "npm run esbuild-base -- --sourcemap && npm run esbuild-base-server -- --sourcemap",
+    "watch": "npm run esbuild-base -- --sourcemap --watch && npm run esbuild-base-server -- --sourcemap --watch",
     "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
     "vscode:prepublish": "npm run esbuild-base -- --minify && npm run esbuild-base-server -- --minify",
     "esbuild-base": "esbuild ./client/src/extension.ts --bundle --outfile=client/out/extension.js --external:vscode --format=cjs --platform=node",
     "esbuild-base-server": "esbuild ./server/src/server.ts --bundle --outfile=server/out/server.js --external:vscode --format=cjs --platform=node",
-    "esbuild": "npm run esbuild-base -- --sourcemap && npm run esbuild-base-server -- --sourcemap",
-    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch && npm run esbuild-base-server -- --sourcemap --watch",
     "test-compile": "tsc -p ./"
   },
   "devDependencies": {

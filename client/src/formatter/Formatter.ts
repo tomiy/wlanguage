@@ -17,6 +17,7 @@ export default class Formatter {
 
     _caseBlock: boolean;
     _caseBody: boolean;
+    _simpleCaseDeclaration: boolean;
     _caseDepth: number;
 
     _textBlockToken: Token;
@@ -187,9 +188,13 @@ export default class Formatter {
             spaceAfter = false;
         }
 
-        if(['--', '++'].includes(currentToken.text) || (currentToken.text === ':' && (!this._caseBlock || this._caseBody))) {
+        if(['--', '++'].includes(currentToken.text) || (currentToken.text === ':' && !this._simpleCaseDeclaration)) {
             spaceBefore = false;
             spaceAfter = false;
+        }
+
+        if(currentToken.text === ':' && this._simpleCaseDeclaration) {
+            this._simpleCaseDeclaration = false;
         }
 
         if(currentToken._previous.type === TOKEN.RESERVED) {
@@ -295,12 +300,11 @@ export default class Formatter {
         //     CAS 2
         //         some code --> complex case body
         // FIN
-        let complexCase = true;
         if(this.reservedWord(currentToken, 'CAS')) {
             let nextToken = currentToken._next;
             while(!nextToken._newlines) {
                 if(nextToken.text === ':') {
-                    complexCase = false;
+                    this._simpleCaseDeclaration = true;
                     break;
                 }
 
@@ -316,7 +320,7 @@ export default class Formatter {
         //     CAS 2 --> deindent here
         //         some code
         // FIN
-        if(this.reservedWord(currentToken, 'CAS') && complexCase) {
+        if(this.reservedWord(currentToken, 'CAS') && !this._simpleCaseDeclaration) {
             if(this._caseBody) {
                 this.popFlags();
 
@@ -352,7 +356,7 @@ export default class Formatter {
         }
 
         // indent back to previous level in case body (or indent once in the first one)
-        if(this.reservedWord(currentToken, 'CAS') && complexCase) {
+        if(this.reservedWord(currentToken, 'CAS') && !this._simpleCaseDeclaration) {
             this.indent();
             this.pushFlags();
 
