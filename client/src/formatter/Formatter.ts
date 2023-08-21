@@ -140,6 +140,10 @@ export default class Formatter {
     }
 
     handleStartExpr(currentToken: Token) {
+        if(currentToken._previous.type === TOKEN.RESERVED && !currentToken._newlines) {
+            this._output._spaceBeforeToken = true;
+        }
+
         if(currentToken.text === '[' && currentToken._next._newlines > 0) {
             this._textBlockToken = currentToken;
         }
@@ -179,13 +183,19 @@ export default class Formatter {
         let spaceBefore = true;
         let spaceAfter = true;
 
-        let isUnary = (['-', '+'].includes(currentToken.text) && (
-            [TOKEN.START_EXPR, TOKEN.EQUALS, TOKEN.OPERATOR].includes(currentToken._previous.type) ||
-            currentToken._previous.text === ','
-        ));
-
-        if(isUnary) {
+        if(currentToken.text === '*' && currentToken._next.text === ',') {
             spaceAfter = false;
+        }
+
+        if((['-', '+'].includes(currentToken.text) && (
+            [TOKEN.START_EXPR, TOKEN.EQUALS, TOKEN.OPERATOR].includes(currentToken._previous.type) ||
+            currentToken._previous.text === ',' || currentToken._previous.type === TOKEN.RESERVED
+        ))) {
+            spaceAfter = false;
+        }
+
+        if(currentToken._previous.type === TOKEN.START_EXPR) {
+            spaceBefore = false;
         }
 
         if(['--', '++'].includes(currentToken.text) || (currentToken.text === ':' && !this._simpleCaseDeclaration)) {
