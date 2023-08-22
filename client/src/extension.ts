@@ -30,7 +30,7 @@ export function activate(context: ExtensionContext) {
 		provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, _options: FormattingOptions, _token: CancellationToken): TextEdit[] {
 			let start = document.offsetAt(range.start);
 			let end = document.offsetAt(range.end) - 1; // Make the end inclusive.
-			let code = document.getText();
+			let code = document.getText(range);
 
 			const formatter = new Formatter(code);
 			let text = formatter.formatText();
