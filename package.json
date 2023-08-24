@@ -2,6 +2,7 @@
   "name": "windev-wlanguage",
   "displayName": "Windev WLanguage",
   "description": "WLanguage support",
+  "publisher": "tomiy",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"

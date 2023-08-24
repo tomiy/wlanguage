@@ -28,14 +28,15 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
 	languages.registerDocumentRangeFormattingEditProvider('wlanguage', {
 		provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, _options: FormattingOptions, _token: CancellationToken): TextEdit[] {
-			let start = document.offsetAt(range.start);
-			let end = document.offsetAt(range.end) - 1; // Make the end inclusive.
-			let code = document.getText(range);
+			let start = document.offsetAt(document.lineAt(range.start.line).range.start);
+			let end = document.offsetAt(document.lineAt(range.end.line).range.end) - 1;
+
+			const resultRange = range.with(document.positionAt(start), document.positionAt(end + 1));
+
+			let code = document.getText(resultRange);
 
 			const formatter = new Formatter(code);
 			let text = formatter.formatText();
-
-			const resultRange = range.with(document.positionAt(start), document.positionAt(end + 1));
 
 			return [TextEdit.replace(resultRange, text)];
 		}

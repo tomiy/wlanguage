@@ -86,14 +86,9 @@ export default class Output {
 
     setIndent(indent: number = 0) {
         this._nextLine.setIndent(indent);
+        this._currentLine.setIndent(indent);
 
-        if(this._lines.length > 1) {
-            this._currentLine.setIndent(indent);
-            return true;
-        }
-
-        this._currentLine.setIndent();
-        return false;
+        return true;
     }
 
     getLineNumber() {

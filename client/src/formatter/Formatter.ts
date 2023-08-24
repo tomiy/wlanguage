@@ -34,6 +34,19 @@ export default class Formatter {
     reset() {
         this._output = new Output();
 
+        let baseIndentString = this._sourceText.match(/^[\t ]*/)[0];
+        let indent = baseIndentString.length;
+        if(indent) {
+            if(baseIndentString[0] === ' ') {
+                indent = Math.ceil(indent / 4);
+            }
+        }
+
+        for(let i = 0; i < indent; i++) {
+            this.indent();
+        }
+        this.pushFlags();
+
         let tokenizer = new Tokenizer(this._sourceText);
         this._tokens = tokenizer.tokenize();
     }
