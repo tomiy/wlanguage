@@ -196,10 +196,21 @@ export default class Formatter {
         let spaceBefore = true;
         let spaceAfter = true;
 
+        // special syntax when making associative arrays (n est un tableau associatif (*, wlEntier) d'entiers)
         if(currentToken.text === '*' && currentToken._next.text === ',') {
             spaceAfter = false;
         }
 
+        // special syntax for %1 type strings in multiline string
+        if(currentToken.text === '%') {
+            spaceAfter = false;
+
+            if(!currentToken._whitespaceBefore) {
+                spaceBefore = false;
+            }
+        }
+
+        // unary operator (+50, -50)
         if((['-', '+'].includes(currentToken.text) && (
             [TOKEN.START_EXPR, TOKEN.EQUALS, TOKEN.OPERATOR].includes(currentToken._previous.type) ||
             currentToken._previous.text === ',' || currentToken._previous.type === TOKEN.RESERVED
