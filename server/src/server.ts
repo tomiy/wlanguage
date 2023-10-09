@@ -39,11 +39,7 @@ connection.onInitialize((params: InitializeParams) => {
 	);
 	const result: InitializeResult = {
 		capabilities: {
-			textDocumentSync: TextDocumentSyncKind.Incremental,
-			// Tell the client that this server supports code completion.
-			completionProvider: {
-				resolveProvider: true
-			}
+			textDocumentSync: TextDocumentSyncKind.Incremental
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -66,31 +62,6 @@ connection.onInitialized(() => {
 			connection.console.log('Workspace folder change event received.');
 		});
 	}
-});
-
-// The example settings
-interface ExampleSettings {
-	server: string;
-}
-
-// Cache the settings of all open documents
-const documentSettings: Map<string, Thenable<ExampleSettings>> = new Map();
-
-connection.onDidChangeConfiguration(_change => {
-	if (hasConfigurationCapability) {
-		// Reset all cached document settings
-		documentSettings.clear();
-	}
-});
-
-// Only keep settings for open documents
-documents.onDidClose(e => {
-	documentSettings.delete(e.document.uri);
-});
-
-connection.onDidChangeWatchedFiles(_change => {
-	// Monitored files have change in VSCode
-	connection.console.log('We received an file change event');
 });
 
 // Make the text document manager listen on the connection
