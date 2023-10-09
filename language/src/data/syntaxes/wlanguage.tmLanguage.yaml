@@ -52,7 +52,7 @@ repository:
                     match: \.
       string-single-quoted:
             name: string.quoted.single.wlanguage
-            begin: \'
+            begin: (?<!d)\'
             end: \'
             patterns:
                   - name: constant.character.escape.wlanguage

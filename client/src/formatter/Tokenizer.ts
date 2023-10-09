@@ -54,6 +54,11 @@ export default class Tokenizer extends BaseTokenizer {
 
         resultingString = this._patterns.get(PATTERN.IDENTIFIER).read();
         if(resultingString !== '') {
+            if(resultingString === 'd' && this._input.peek() === '\'') {
+                resultingString += this._input.next();
+                resultingString += this._patterns.get(PATTERN.IDENTIFIER).read();
+            }
+
             resultingString = resultingString.replace(REGEXP.ALL_LINE_BREAKS, '\n');
 
             if(REGEXP.RESERVED.test(resultingString)) {

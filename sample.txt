@@ -23,6 +23,8 @@ G_LOGF("CSXXX: p1 = " + p1 + ", p2 = " + p2)
 LOCAL
     Reponse est une chaine = "OK" + RC
     FlagTest est un booleen = Vrai
+    Tableau1 est un tableau d'entiers
+    Tableau2 est un tableau d'octets
 
 SI FlagTest ALORS
     // Mettre le traitement a faire lors d'un test
